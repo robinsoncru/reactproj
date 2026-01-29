@@ -9,22 +9,9 @@ const charList = list;
 
 
 
-let pokelink = "https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0";
 let mariolink = "https://super-mario-bros-character-api.onrender.com/api/"
-let zeldalink = "https://zelda.fanapis.com/api/characters"
-const data = await  fetch("https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0").then(res => res.json()) ;
 
 
-
-
-
-async function getPoke(namePoke){
-  const res = await  fetch("https://pokeapi.co/api/v2/pokemon/" + namePoke) ;
-  if (!res.ok) {
-    throw new Error('Pokemon not found'); 
-  }
-  return await  res.json() ;
-}
 
 async function getMario(namePoke){
   const res = await  fetch(mariolink + namePoke) ;
@@ -34,21 +21,13 @@ async function getMario(namePoke){
   return await  res.json() ;
 }
 
-async function getZelda(namePoke){
-  const res = await  fetch(zeldalink) ;
-  if (!res.ok) {
-    throw new Error('Pokemon not found'); 
-  }
-  return await  res.json() ;
-}
-
 function App() {
-  const [result, setResult] = useState("")
-  const [name, setName] = useState("__")
-  const [nb, setNb] = useState(0)
-  const [bright, setBright] = useState(0)
-  const [image, setImage] = useState(viteLogo)
-  const [ans,setAns] = useState("")
+  const [result, setResult] = useState("text");
+  const [name, setName] = useState("text");
+  const [nb, setNb] = useState(0);
+  const [bright, setBright] = useState(0);
+  const [image, setImage] = useState(viteLogo);
+  const [ans,setAns] = useState("text")
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
@@ -68,10 +47,11 @@ async function increaseBright(bright ,bool,t){
       delay(10).then(() => {
         t+=1;
         increaseBright(bright,bool,t+1);
-        console.log("incr")  
+        // console.log("increaseBright incr");
       });
       
   }
+
   async function upBrightness(bool) {
     let bright = 1 ;
     if(bool) bright = 0  ;
@@ -79,36 +59,15 @@ async function increaseBright(bright ,bool,t){
     bright /= 100 ;
   }
 
-  function test(){
-
-  }
   
   const  handle = async () => {
     let n = Math.floor ( Math.random() * charList.length ) ;
     upBrightness(false)
     setNb(n) ;
-    let poke = "" 
-    // getPoke(data.results[n].name)
     getMario(charList[n])
     .then(res => {
-
-      // json = res.json();
-
-      // setName(res.data[0].name) ;
-      // setImage()
-
-
       setName(res.name);
       setImage(res.image)
-
-
-      // if (!res || !res.sprites.back_default) {
-      //   setName("Invalid : Pokemon likely has no sprites.");
-      //   handle()
-      //   return;
-      // }
-      // setImage(res.sprites.back_default);
-      // setName(data.results[n].name);
       
     })
     .catch(err => {
@@ -118,13 +77,32 @@ async function increaseBright(bright ,bool,t){
   
   }
 
+  function print(txt) {
+    console.log(txt);
+  }
+
+
   function testAns(ans){
-    if(ans == name){
+    print("test ans");
+    const cleanAns = ans.trim().toLowerCase().replace(/\s/g, "");
+    const cleanName = name.trim().toLowerCase().replace(/\s/g, "");
+
+    // console.log("User Input Length:", cleanAns.length);
+    // console.log("API Name Length:", cleanName.length);
+
+
+    // print(cleanAns);
+    // print(cleanName);
+    
+    
+
+    // print("type 1"+typeof(ans));
+    // print("type 2"+typeof(name));
+
+    if(cleanAns == cleanName){
       setResult("Yay")
       upBrightness(true)
     }else{
-      console.log(ans)
-      console.log(name)
 
       setResult("sus")
     }
