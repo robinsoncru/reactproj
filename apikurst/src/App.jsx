@@ -45,6 +45,9 @@ function App() {
   const [image, setImage] = useState(viteLogo)
   const [allow,setAllow] = useState(true)
   
+  const [ans,setAns] = useState("")
+  const [score, setScore] = useState(0)
+  const [firstTry, setFirstTry] = useState(false)
   
   
   function delay(time) {
@@ -86,8 +89,7 @@ function App() {
     let n = Math.floor ( Math.random() * charList.length ) ;
     upBrightness(false)
     setNb(n) ;
-    let poke = "" 
-    setAllow(true); 
+    setFirstTry(true);
 
     await getMario(charList[n])
     .then(res => {
@@ -104,12 +106,21 @@ function App() {
     function testAns(valeurSaisie) {
         // .toLowerCase() permet d'ignorer les majuscules (Mario = mario)
         // .trim() enlève les espaces inutiles avant ou après
-        if (valeurSaisie.toLowerCase().trim() === name.toLowerCase().trim()) {
+        
+        const cleanAns = valeurSaisie.trim().toLowerCase().replace(/\s/g, "");
+        const cleanName = name.trim().toLowerCase().replace(/\s/g, "");
+        
+        if (cleanAns === cleanName) {
             playSound(coin, 1, false)
             setResult("Yay ! C'est gagné !");
             upBrightness(true);
             setAllow(false); 
-            console.log("test");
+            
+            if (firstTry) {
+              setScore(score+1);
+              setFirstTry(false);
+            }
+
         } else {
             playSound(mamamia, 1 , false)
 
@@ -135,6 +146,9 @@ function App() {
   
   return (
     <>
+      <p id="scoreDisplay">
+        Your score is {score}
+      </p>
       <h1>Who is that Character ?</h1>
       
       <h2>{result}</h2>

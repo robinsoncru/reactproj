@@ -30,6 +30,13 @@ body {
   min-height: 100vh;
 }
 
+p#scoreDisplay {
+  background-color: #646cff;
+  max-width: 35%;
+  place-items: center;
+  font-size: 20px;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
