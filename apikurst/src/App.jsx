@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { useNavigate } from "react-router";
 
 import jumpSound from './assets/do-80236.mp3'; 
 import coin from './assets/coin.mp3'; 
@@ -37,6 +38,10 @@ let nb_loads = 0 ;
 
 
 function App() {
+
+  let navigate = useNavigate();
+
+
   const [result, setResult] = useState("")
   const [name, setName] = useState("__")
   const [comment, setComment] = useState("__")
@@ -145,6 +150,11 @@ function App() {
   
   return (
     <>
+    
+       <button
+              onClick={() => navigate("/Meme")}>
+                Switch to second game
+        </button>
       <p id="scoreDisplay">
         Your score is {score}
       </p>
