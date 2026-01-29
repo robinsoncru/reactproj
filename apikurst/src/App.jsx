@@ -9,22 +9,15 @@ const charList = list;
 
 
 
-let pokelink = "https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0";
+
 let mariolink = "https://super-mario-bros-character-api.onrender.com/api/"
-let zeldalink = "https://zelda.fanapis.com/api/characters"
+
 const data = await  fetch("https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0").then(res => res.json()) ;
 
 
 
 
 
-async function getPoke(namePoke){
-  const res = await  fetch("https://pokeapi.co/api/v2/pokemon/" + namePoke) ;
-  if (!res.ok) {
-    throw new Error('Pokemon not found'); 
-  }
-  return await  res.json() ;
-}
 
 async function getMario(namePoke){
   const res = await  fetch(mariolink + namePoke) ;
@@ -34,13 +27,6 @@ async function getMario(namePoke){
   return await  res.json() ;
 }
 
-async function getZelda(namePoke){
-  const res = await  fetch(zeldalink) ;
-  if (!res.ok) {
-    throw new Error('Pokemon not found'); 
-  }
-  return await  res.json() ;
-}
 
 function App() {
   const [result, setResult] = useState("")
@@ -57,6 +43,7 @@ function App() {
 
   async function increaseBright(bright ,bool,t){
     if(t == 100){
+      setBright(1*bool)
       return;
     }
     if(bool){
@@ -77,12 +64,9 @@ function App() {
     let bright = 1 ;
     if(bool) bright = 0  ;
     increaseBright(bright,bool,0)
-    bright /= 100 ;
+    
   }
 
-  function test(){
-
-  }
   
   const  handle = async () => {
     let n = Math.floor ( Math.random() * charList.length ) ;
@@ -103,7 +87,7 @@ function App() {
   }
 
   function testAns(ans){
-    if(ans == name){
+    if(ans.value === name.value){
       setResult("Yay")
       upBrightness(true)
     }else{
