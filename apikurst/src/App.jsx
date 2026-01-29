@@ -45,6 +45,7 @@ async function getZelda(namePoke){
 function App() {
   const [result, setResult] = useState("")
   const [name, setName] = useState("__")
+  const [comment, setComment] = useState("__")
   const [nb, setNb] = useState(0)
   const [bright, setBright] = useState(0)
   const [image, setImage] = useState(viteLogo)
@@ -88,34 +89,17 @@ function App() {
     upBrightness(false)
     setNb(n) ;
     let poke = "" 
-    // getPoke(data.results[n].name)
-    getMario(charList[n])
+
+    await getMario(charList[n])
     .then(res => {
 
-      // json = res.json();
-
-      // setName(res.data[0].name) ;
-      // setImage()
-
-
-      setName(res.name);
       setImage(res.image)
-
-
-      // if (!res || !res.sprites.back_default) {
-      //   setName("Invalid : Pokemon likely has no sprites.");
-      //   handle()
-      //   return;
-      // }
-      // setImage(res.sprites.back_default);
-      // setName(data.results[n].name);
-      
+      setName(res.name)
     })
     .catch(err => {
       setName("invalid : " +  err);
     });
-    
-  
+
   }
 
   function testAns(ans){
@@ -132,11 +116,17 @@ function App() {
 
   return (
     <>
-      <h1>Who is that Pokémon ?</h1>
+      <h1>Who is that Character ?</h1>
       <h2>{result}</h2>
       <div>
         <p>It is {name} and id {nb} </p>
-        <button onClick={handle}>Generate pokemon</button>
+        <p> {comment}  </p>
+
+        <button onClick={() => {
+          handle();
+          setComment("Loading...")
+          
+          } }>Generate Character</button>
       </div>
       <div style={
         {display: 'flex',          // 1. Enable Flexbox
@@ -158,7 +148,7 @@ function App() {
         />
         </label>
         <div style={{justifyContent : 'center'}}>
-          <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}}/>
+          <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}} onLoad={() => setComment("Guess")}/>
         </div>
       </div>
       
