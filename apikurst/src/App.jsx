@@ -90,7 +90,7 @@ function App() {
     upBrightness(false)
     setNb(n) ;
     setFirstTry(true);
-
+    setAllow(true);
     await getMario(charList[n])
     .then(res => {
 
@@ -142,7 +142,6 @@ function App() {
     nb_loads += 1 ;
   }, []);
 
-  let allowText = true ;
   
   return (
     <>
