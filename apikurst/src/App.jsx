@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+
+import jumpSound from './assets/do-80236.mp3'; 
+import coin from './assets/coin.mp3'; 
+import death from './assets/death.mp3'; 
+import mamamia from './assets/mamamia.mp3'; 
+import music from './assets/music.mp3'; 
 
 import list from './assets/characters.json'
 
@@ -21,16 +27,27 @@ async function getMario(namePoke){
   return await  res.json() ;
 }
 
+
+let nb_loads = 0 ;
+
+
 function App() {
-  const [result, setResult] = useState("text");
-  const [name, setName] = useState("text");
-  const [nb, setNb] = useState(0);
-  const [bright, setBright] = useState(0);
-  const [image, setImage] = useState(viteLogo);
-  const [ans,setAns] = useState("text")
+  const [result, setResult] = useState("")
+  const [name, setName] = useState("__")
+  const [comment, setComment] = useState("__")
+  const [nb, setNb] = useState(0)
+  const [bright, setBright] = useState(0)
+  const [image, setImage] = useState(viteLogo)
+  const [ans,setAns] = useState("")
+  
+  const start = 0;
+  
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
-}
+  }
+
+  
+  //  const [playSound] = useSound('./assets.mp3');
 
 
 async function increaseBright(bright ,bool,t){
@@ -110,8 +127,10 @@ async function increaseBright(bright ,bool,t){
 
   return (
     <>
-      <h1>Who is that Pokémon ?</h1>
+      <h1>Who is that Character ?</h1>
+      
       <h2>{result}</h2>
+      
       <div>
         <p>It is {name} and id {nb} </p>
         <button onClick={handle}>Generate pokemon</button>
