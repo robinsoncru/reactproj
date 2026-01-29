@@ -36,7 +36,7 @@ async function getMario(namePoke){
 let nb_loads = 0 ;
 
 
-function App() {
+function Meme() {
   const [result, setResult] = useState("")
   const [name, setName] = useState("__")
   const [comment, setComment] = useState("__")
@@ -139,41 +139,12 @@ function App() {
       
       <h2>{result}</h2>
       
-      <div>
-        <p>It is {name} and id {nb} </p>
-        <p> {comment}  </p>
-
-        <button onClick={() => {
-          handle();
-          setComment("Loading...")
-          
-          } }>Generate Character</button>
-      </div>
-      <div style={
-        {display: 'flex',          // 1. Enable Flexbox
-        flexDirection: 'column',
-        }
-      }>
-        <label>
-          Answer:
-            <input
-                type="text"
-                name="postContent"
-                className="mario-input" // On lui donne une classe pour le CSS
-                onKeyDown={(evt) => {
-                    if ( (evt.key === 'Enter' )  && (allow === true)) { // 'key' est plus moderne que 'keyCode'
-                        testAns(evt.target.value);
-                        evt.target.value = ""; // On vide le champ
-                    }
-                }}
-            />
-        </label>
         <div style={{justifyContent : 'center'}}>
           <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}} onLoad={() => setComment("Guess")}/>
         </div>
-      </div>
+      
       
     </>
   )}
 
-export default App
+export default Meme
