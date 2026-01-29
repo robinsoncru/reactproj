@@ -15,7 +15,12 @@ const charList = list;
 
 
 
+
 let mariolink = "https://super-mario-bros-character-api.onrender.com/api/"
+
+const data = await  fetch("https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0").then(res => res.json()) ;
+
+
 
 
 
@@ -39,6 +44,8 @@ function App() {
   const [bright, setBright] = useState(0)
   const [image, setImage] = useState(viteLogo)
   const [ans,setAns] = useState("")
+  const [score, setScore] = useState(0)
+  const [firstTry, setFirstTry] = useState(false)
   
   const start = 0;
   
@@ -50,8 +57,9 @@ function App() {
   //  const [playSound] = useSound('./assets.mp3');
 
 
-async function increaseBright(bright ,bool,t){
+  async function increaseBright(bright ,bool,t){
     if(t == 100){
+      setBright(1*bool)
       return;
     }
     if(bool){
@@ -64,16 +72,15 @@ async function increaseBright(bright ,bool,t){
       delay(10).then(() => {
         t+=1;
         increaseBright(bright,bool,t+1);
-        // console.log("increaseBright incr");
+        console.log("incr")  
       });
       
   }
-
   async function upBrightness(bool) {
     let bright = 1 ;
     if(bool) bright = 0  ;
     increaseBright(bright,bool,0)
-    bright /= 100 ;
+    
   }
 
   
@@ -81,59 +88,69 @@ async function increaseBright(bright ,bool,t){
     let n = Math.floor ( Math.random() * charList.length ) ;
     upBrightness(false)
     setNb(n) ;
-    getMario(charList[n])
+    setFirstTry(true);
+
+    await getMario(charList[n])
     .then(res => {
-      setName(res.name);
+
       setImage(res.image)
-      
+      setName(res.name)
     })
     .catch(err => {
       setName("invalid : " +  err);
     });
-    
-  
+
   }
 
-  function print(txt) {
-    console.log(txt);
-  }
+    function testAns(valeurSaisie) {
+        // .toLowerCase() permet d'ignorer les majuscules (Mario = mario)
+        // .trim() enlève les espaces inutiles avant ou après
+        const cleanAns = valeurSaisie.trim().toLowerCase().replace(/\s/g, "");
+        const cleanName = name.trim().toLowerCase().replace(/\s/g, "");
+        if (cleanAns === cleanName) {
+            setResult("Yay ! C'est gagné !");
+            upBrightness(true);
+             
+            if (firstTry) {
+              setScore(score+1);
+              setFirstTry(false);
+            }
 
-
-  function testAns(ans){
-    print("test ans");
-    const cleanAns = ans.trim().toLowerCase().replace(/\s/g, "");
-    const cleanName = name.trim().toLowerCase().replace(/\s/g, "");
-
-    // console.log("User Input Length:", cleanAns.length);
-    // console.log("API Name Length:", cleanName.length);
-
-
-    // print(cleanAns);
-    // print(cleanName);
-    
-    
-
-    // print("type 1"+typeof(ans));
-    // print("type 2"+typeof(name));
-
-    if(cleanAns == cleanName){
-      setResult("Yay")
-      upBrightness(true)
-    }else{
-
-      setResult("sus")
+        } else {
+            setResult("Oups... Essaie encore !");
+        }
     }
-  }
 
+
+  const playSound = (sound, volume) => {
+  let audio = new Audio(sound);
+  audio.volume = volume ;
+  audio.play();
+  };
+
+ useEffect(() => {
+    if(nb_loads < 1) playSound(music, 0.5);
+    nb_loads += 1 ;
+  }, []);
+  
   return (
     <>
+      <p id="scoreDisplay">
+        Your score is {score}
+      </p>
       <h1>Who is that Character ?</h1>
       
       <h2>{result}</h2>
       
       <div>
         <p>It is {name} and id {nb} </p>
-        <button onClick={handle}>Generate pokemon</button>
+        <p> {comment}  </p>
+
+        <button onClick={() => {
+          handle();
+          setComment("Loading...")
+          
+          } }>Generate Character</button>
       </div>
       <div style={
         {display: 'flex',          // 1. Enable Flexbox
@@ -142,20 +159,21 @@ async function increaseBright(bright ,bool,t){
       }>
         <label>
           Answer:
-        <textarea name="postContent" rows={1} cols={40} 
-          onKeyDown={(evt) => {
-            const keyCode = evt.keyCode;
-            if (keyCode === 13) {
-              setAns(evt.target.value);
-              testAns(evt.target.value)
-              evt.target.value = null;
-              
-            };
-          }}
-        />
+            <input
+                type="text"
+                name="postContent"
+                className="mario-input" // On lui donne une classe pour le CSS
+                onKeyDown={(evt) => {
+                    if (evt.key === 'Enter') { // 'key' est plus moderne que 'keyCode'
+                        setAns(evt.target.value);
+                        testAns(evt.target.value);
+                        evt.target.value = ""; // On vide le champ
+                    }
+                }}
+            />
         </label>
         <div style={{justifyContent : 'center'}}>
-          <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}}/>
+          <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}} onLoad={() => setComment("Guess")}/>
         </div>
       </div>
       
