@@ -86,17 +86,16 @@ function App() {
 
   }
 
-  function testAns(ans){
-    if(ans.value === name.value){
-      setResult("Yay")
-      upBrightness(true)
-    }else{
-      console.log(ans)
-      console.log(name)
-
-      setResult("sus")
+    function testAns(valeurSaisie) {
+        // .toLowerCase() permet d'ignorer les majuscules (Mario = mario)
+        // .trim() enlève les espaces inutiles avant ou après
+        if (valeurSaisie.toLowerCase().trim() === name.toLowerCase().trim()) {
+            setResult("Yay ! C'est gagné !");
+            upBrightness(true);
+        } else {
+            setResult("Oups... Essaie encore !");
+        }
     }
-  }
 
   return (
     <>
@@ -119,17 +118,18 @@ function App() {
       }>
         <label>
           Answer:
-        <textarea name="postContent" rows={1} cols={40} 
-          onKeyDown={(evt) => {
-            const keyCode = evt.keyCode;
-            if (keyCode === 13) {
-              setAns(evt.target.value);
-              testAns(evt.target.value)
-              evt.target.value = null;
-              
-            };
-          }}
-        />
+            <input
+                type="text"
+                name="postContent"
+                className="mario-input" // On lui donne une classe pour le CSS
+                onKeyDown={(evt) => {
+                    if (evt.key === 'Enter') { // 'key' est plus moderne que 'keyCode'
+                        setAns(evt.target.value);
+                        testAns(evt.target.value);
+                        evt.target.value = ""; // On vide le champ
+                    }
+                }}
+            />
         </label>
         <div style={{justifyContent : 'center'}}>
           <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}} onLoad={() => setComment("Guess")}/>
