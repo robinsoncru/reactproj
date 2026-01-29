@@ -54,7 +54,7 @@ function App() {
 }
 
 
-  async function increaseBright(bright ,bool,t){
+async function increaseBright(bright ,bool,t){
     if(t == 100){
       return;
     }
