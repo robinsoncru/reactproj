@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+
+import jumpSound from './assets/do-80236.mp3'; 
+import coin from './assets/coin.mp3'; 
+import death from './assets/death.mp3'; 
+import mamamia from './assets/mamamia.mp3'; 
+import music from './assets/music.mp3'; 
 
 import list from './assets/characters.json'
 
@@ -18,7 +24,6 @@ const data = await  fetch("https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0
 
 
 
-
 async function getMario(namePoke){
   const res = await  fetch(mariolink + namePoke) ;
   if (!res.ok) {
@@ -26,6 +31,9 @@ async function getMario(namePoke){
   }
   return await  res.json() ;
 }
+
+
+let nb_loads = 0 ;
 
 
 function App() {
@@ -36,9 +44,15 @@ function App() {
   const [bright, setBright] = useState(0)
   const [image, setImage] = useState(viteLogo)
   const [ans,setAns] = useState("")
+  
+  const start = 0;
+  
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
-}
+  }
+
+  
+  //  const [playSound] = useSound('./assets.mp3');
 
 
   async function increaseBright(bright ,bool,t){
@@ -87,21 +101,38 @@ function App() {
   }
 
   function testAns(ans){
-    if(ans.value === name.value){
+    if(ans === name){
+      playSound(coin,1)
       setResult("Yay")
       upBrightness(true)
+      
     }else{
       console.log(ans)
       console.log(name)
-
+      playSound(mamamia,1)
+      
       setResult("sus")
     }
   }
 
+
+  const playSound = (sound, volume) => {
+  let audio = new Audio(sound);
+  audio.volume = volume ;
+  audio.play();
+  };
+
+ useEffect(() => {
+    if(nb_loads < 1) playSound(music, 0.5);
+    nb_loads += 1 ;
+  }, []);
+  
   return (
     <>
       <h1>Who is that Character ?</h1>
+      
       <h2>{result}</h2>
+      
       <div>
         <p>It is {name} and id {nb} </p>
         <p> {comment}  </p>
