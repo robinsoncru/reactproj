@@ -23,7 +23,8 @@ function Meme() {
   const [image, setImage] = useState(viteLogo)
   const [allow,setAllow] = useState(true)
   
-  
+  const [style, setStyle] = useState({}); 
+
   
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
@@ -51,6 +52,14 @@ function Meme() {
   let allowText = true ;
   
   
+    const setCoordinates = (x,y) => {
+    // You don't need whitespace in here, I added it for readability
+    // I would recommend using something like EmotionJS for this
+        return `position:absolute;   
+                left:${x}px;         
+                top:${y}px;`
+    }
+  
   return (
     <>
       <h1>Eliminate all the bombs before they reach the ground !</h1>
@@ -61,6 +70,7 @@ function Meme() {
           {/* <button><img = "</button> */}
 
         </div>
+        
       
       
     </>
