@@ -1,121 +1,47 @@
 import { useState, useRef, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import './Meme.css'
 
 import jumpSound from './assets/do-80236.mp3'; 
 import coin from './assets/coin.mp3'; 
 import death from './assets/death.mp3'; 
 import mamamia from './assets/mamamia.mp3'; 
 import music from './assets/music.mp3'; 
-
+import im from './assets/pngwing.com.png?raw'
 import list from './assets/characters.json'
-
-const charList = list;
-
-
-
-
-let mariolink = "https://super-mario-bros-character-api.onrender.com/api/"
-
-const data = await  fetch("https://pokeapi.co/api/v2/pokemon?limit=1350&offset=0").then(res => res.json()) ;
-
-
-
-
-
-async function getMario(namePoke){
-  const res = await  fetch(mariolink + namePoke) ;
-  if (!res.ok) {
-    throw new Error('Pokemon not found'); 
-  }
-  return await  res.json() ;
-}
-
 
 let nb_loads = 0 ;
 
 
 function Meme() {
-  const [result, setResult] = useState("")
-  const [name, setName] = useState("__")
-  const [comment, setComment] = useState("__")
-  const [nb, setNb] = useState(0)
-  const [bright, setBright] = useState(0)
-  const [image, setImage] = useState(viteLogo)
-  const [allow,setAllow] = useState(true)
-  
   
   
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
   }
 
+  function getButtons( width, height , coords){
+  const nbBombs = 10 
+  const maxX = width;
+  const maxY = height;
+  const bomb = Math.floor(Math.random() * nbBombs) 
+  
+  for(let i = 0 ; i < nbBombs ; i++ ){
+    coords.push( {
+      id : i,
+      xy :[ (Math.floor(Math.random() * maxX)) , Math.floor(Math.random() * maxY) ],
+      bomb : false
+    } ) 
+    
+  }
+  coords[bomb].bomb = true
+  
+  }
   
   //  const [playSound] = useSound('./assets.mp3');
 
 
-  async function increaseBright(bright ,bool,t){
-    if(t == 100){
-      setBright(1*bool)
-      return;
-    }
-    if(bool){
-        bright += 1 ;
-        setBright(bright/100)
-      }else{
-        bright -= 1 ;
-        setBright(bright/100)
-      }
-      delay(10).then(() => {
-        t+=1;
-        increaseBright(bright,bool,t+1);
-        console.log("incr")  
-      });
-      
-  }
-  async function upBrightness(bool) {
-    let bright = 1 ;
-    if(bool) bright = 0  ;
-    increaseBright(bright,bool,0)
-    
-  }
-
-  
-  const  handle = async () => {
-    let n = Math.floor ( Math.random() * charList.length ) ;
-    upBrightness(false)
-    setNb(n) ;
-    let poke = "" 
-    setAllow(true); 
-
-    await getMario(charList[n])
-    .then(res => {
-
-      setImage(res.image)
-      setName(res.name)
-    })
-    .catch(err => {
-      setName("invalid : " +  err);
-    });
-
-  }
-
-    function testAns(valeurSaisie) {
-        // .toLowerCase() permet d'ignorer les majuscules (Mario = mario)
-        // .trim() enlève les espaces inutiles avant ou après
-        if (valeurSaisie.toLowerCase().trim() === name.toLowerCase().trim()) {
-            playSound(coin, 1, false)
-            setResult("Yay ! C'est gagné !");
-            upBrightness(true);
-            setAllow(false); 
-            console.log("test");
-        } else {
-            playSound(mamamia, 1 , false)
-
-            setResult("Oups... Essaie encore !");
-        }
-    }
 
 
   const playSound = (sound, volume, loop) => {
@@ -126,22 +52,49 @@ function Meme() {
   audio.play();
   };
 
+  let zoneref = useRef(null); 
+
+
  useEffect(() => {
     if(nb_loads < 1) playSound(music, 0.5, true,0);
+     
+
+    if(zoneref.current != null)   {getButtons(zoneref.current.offsetWidth , zoneref.current.offsetHeight, coords)};
+    console.log(zoneref.current.offsetWidth)
+    
     nb_loads += 1 ;
   }, []);
 
-  let allowText = true ;
+
+    let allowText = true ;
+    const coords = [];
+  
+
+    getButtons(200,200,coords)
+  
   
   return (
     <>
-      <h1>Who is that Character ?</h1>
+      <h1>Eliminate all the bombs before they reach the ground !</h1>
       
-      <h2>{result}</h2>
       
-        <div style={{justifyContent : 'center'}}>
-          <img className='pokeIm' src = {image} height={300} width={200} style={{filter : 'brightness(' + bright.toString() + ')'}} onLoad={() => setComment("Guess")}/>
+        <div id="firezone" ref={zoneref}>
+              <img src={im} width="100" alt="folder"/>
+
+            { 
+            coords.map(({ xy, bomb, id }) => (
+                    <button key = {id} style={{position : 'relative' ,top : xy[1] + 'px', left : xy[0] + 'px', width: '1%'}} onClick={() => {
+                      if(bomb){
+                        console.log("boom")
+                      }else{
+                        console.log("oof")
+                      }
+                    }}  >
+                         <img src="./assets/pngwing.com.png" width="100" alt="folder"/>
+                    </button>
+                ))}
         </div>
+        
       
       
     </>
