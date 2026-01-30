@@ -8,36 +8,35 @@ import coin from './assets/coin.mp3';
 import death from './assets/death.mp3'; 
 import mamamia from './assets/mamamia.mp3'; 
 import music from './assets/music.mp3'; 
-
+import im from './assets/pngwing.com.png?raw'
 import list from './assets/characters.json'
 
 let nb_loads = 0 ;
 
 
 function Meme() {
-  const [result, setResult] = useState("")
-  const [name, setName] = useState("__")
-  const [comment, setComment] = useState("__")
-  const [nb, setNb] = useState(0)
-  const [bright, setBright] = useState(0)
-  const [image, setImage] = useState(viteLogo)
-  const [allow,setAllow] = useState(true)
   
-  const [style, setStyle] = useState({}); 
-
   
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
   }
 
   function getButtons( width, height , coords){
-  
   const nbBombs = 10 
   const maxX = width;
   const maxY = height;
+  const bomb = Math.floor(Math.random() * nbBombs) 
+  
   for(let i = 0 ; i < nbBombs ; i++ ){
-    coords.push( [ (Math.floor(Math.random() * maxX)) , Math.floor(Math.random() * maxY) ] ) 
+    coords.push( {
+      id : i,
+      xy :[ (Math.floor(Math.random() * maxX)) , Math.floor(Math.random() * maxY) ],
+      bomb : false
+    } ) 
+    
   }
+  coords[bomb].bomb = true
+  
   }
   
   //  const [playSound] = useSound('./assets.mp3');
@@ -80,9 +79,18 @@ function Meme() {
       
       
         <div id="firezone" ref={zoneref}>
-            {coords.map(([ x , y ]) => (
-                    <button style={{position : 'relative' ,top : y + 'px', left : x + 'px', width: '1%'}}  >
-                    
+              <img src={im} width="100" alt="folder"/>
+
+            { 
+            coords.map(({ xy, bomb, id }) => (
+                    <button key = {id} style={{position : 'relative' ,top : xy[1] + 'px', left : xy[0] + 'px', width: '1%'}} onClick={() => {
+                      if(bomb){
+                        console.log("boom")
+                      }else{
+                        console.log("oof")
+                      }
+                    }}  >
+                         <img src="./assets/pngwing.com.png" width="100" alt="folder"/>
                     </button>
                 ))}
         </div>
