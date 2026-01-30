@@ -30,6 +30,15 @@ function Meme() {
   return new Promise(resolve => setTimeout(resolve, time));
   }
 
+  function getButtons( width, height , coords){
+  
+  const nbBombs = 10 
+  const maxX = width;
+  const maxY = height;
+  for(let i = 0 ; i < nbBombs ; i++ ){
+    coords.push( [ (Math.floor(Math.random() * maxX)) , Math.floor(Math.random() * maxY) ] ) 
+  }
+  }
   
   //  const [playSound] = useSound('./assets.mp3');
 
@@ -44,31 +53,38 @@ function Meme() {
   audio.play();
   };
 
+  let zoneref = useRef(null); 
+
+
  useEffect(() => {
     if(nb_loads < 1) playSound(music, 0.5, true,0);
+     
+
+    if(zoneref.current != null)   {getButtons(zoneref.current.offsetWidth , zoneref.current.offsetHeight, coords)};
+    console.log(zoneref.current.offsetWidth)
+    
     nb_loads += 1 ;
   }, []);
 
-  let allowText = true ;
+
+    let allowText = true ;
+    const coords = [];
   
+
+    getButtons(200,200,coords)
   
-    const setCoordinates = (x,y) => {
-    // You don't need whitespace in here, I added it for readability
-    // I would recommend using something like EmotionJS for this
-        return `position:absolute;   
-                left:${x}px;         
-                top:${y}px;`
-    }
   
   return (
     <>
       <h1>Eliminate all the bombs before they reach the ground !</h1>
       
       
-        <div id="firezone">
-
-          {/* <button><img = "</button> */}
-
+        <div id="firezone" ref={zoneref}>
+            {coords.map(([ x , y ]) => (
+                    <button style={{position : 'relative' ,top : y + 'px', left : x + 'px', width: '1%'}}  >
+                    
+                    </button>
+                ))}
         </div>
         
       
