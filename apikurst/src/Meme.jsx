@@ -4,6 +4,8 @@ import './Meme.css'
 import music from './assets/music.mp3'; 
 import bebombImg from './assets/bebomb.png'
 import crossImg from './assets/cross.png'
+import { useNavigate } from "react-router";
+
 
 
 const nbBomb = 20;
@@ -12,7 +14,6 @@ let nb_loads = 0 ;
 
 
 function Meme() {
-  
 
   
   const coords = [];
@@ -72,13 +73,19 @@ function Meme() {
     getButtons(lgBomb, lgBomb,coords);
 
 
-  
+  let navigate = useNavigate();
   
   return (
     <>
+
+      <button
+              onClick={() => navigate("/")}>
+                Switch to previous game
+        </button>
       <h1>Eliminate all the bombs before they reach the ground !</h1>
       
-      
+
+
         <div id="firezone" ref={zoneref} style={{
           height:lgBomb+100,
           width:lgBomb+100
