@@ -11,6 +11,7 @@ import music from './assets/music.mp3';
 // import im from './assets/pngwing.com.png?raw'
 import list from './assets/characters.json'
 
+
 let nb_loads = 0 ;
 
 
@@ -82,8 +83,31 @@ function Meme() {
               {/* <img src={im} width="100" alt="folder"/> */}
 
             { 
+    //          const buttonStyle = {
+    //           width: '40px', // Buttons with background images usually need dimensions
+    //           height: '40px',
+    // backgroundImage: `url(${bebombImg})`,
+    // backgroundSize: 'cover',
+    // backgroundColor:"transparent",
+    // border: 'none',
+    // cursor: 'pointer',
+    // boxShadow: 'none',
+    // position: 'relative',
+    // top: x+'px',
+    // left: y+'px'
+
+    // };
             coords.map(({ xy, bomb, id }) => (
-                    <button key = {id} style={{position : 'relative' ,top : xy[1] + 'px', left : xy[0] + 'px', width: '1%'}} onClick={() => {
+             
+                    <button key = {id} style={{
+                      position : 'relative' ,
+                      top : xy[1] + 'px',
+                       left : xy[0] + 'px',
+                      width: '1%',
+                      backgroundImage: `url(${bebombImg})`,
+                      backgroundSize: 'cover',
+                      backgroundColor:"transparent",
+                      }} onClick={() => {
                       if(bomb){
                         console.log("boom")
                       }else{
