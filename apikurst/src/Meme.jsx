@@ -1,38 +1,38 @@
 import { useState, useRef, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './Meme.css'
 
-import jumpSound from './assets/do-80236.mp3'; 
-import coin from './assets/coin.mp3'; 
-import death from './assets/death.mp3'; 
-import mamamia from './assets/mamamia.mp3'; 
 import music from './assets/music.mp3'; 
-// import im from './assets/pngwing.com.png?raw'
-import list from './assets/characters.json'
+import bebombImg from './assets/bebomb.png'
+import crossImg from './assets/cross.png'
 
+
+const nbBomb = 20;
 
 let nb_loads = 0 ;
 
 
 function Meme() {
   
+
   
+  const coords = [];
+  const lgBomb = 200;
+  let nbBombFound = 0;
+
+
   function delay(time) {
   return new Promise(resolve => setTimeout(resolve, time));
   }
 
-  function getButtons( width, height , coords){
-  const nbBombs = 10 
-  const maxX = width;
-  const maxY = height;
-  const bomb = Math.floor(Math.random() * nbBombs) 
+  function getButtons( maxX, maxY){
+  const nbBombs = nbBomb ;
+  const bomb = Math.floor(Math.random() * nbBombs) ;
   
   for(let i = 0 ; i < nbBombs ; i++ ){
     coords.push( {
       id : i,
       xy :[ (Math.floor(Math.random() * maxX)) , Math.floor(Math.random() * maxY) ],
-      bomb : false
+      bomb : false,
     } ) 
     
   }
@@ -40,8 +40,6 @@ function Meme() {
   
   }
   
-  //  const [playSound] = useSound('./assets.mp3');
-
 
 
 
@@ -56,7 +54,9 @@ function Meme() {
   let zoneref = useRef(null); 
 
 
+
  useEffect(() => {
+
     if(nb_loads < 1) playSound(music, 0.5, true,0);
      
 
@@ -64,14 +64,14 @@ function Meme() {
     console.log(zoneref.current.offsetWidth)
     
     nb_loads += 1 ;
+
+
   }, []);
 
 
-    let allowText = true ;
-    const coords = [];
-  
+    getButtons(lgBomb, lgBomb,coords);
 
-    getButtons(200,200,coords)
+
   
   
   return (
@@ -79,26 +79,14 @@ function Meme() {
       <h1>Eliminate all the bombs before they reach the ground !</h1>
       
       
-        <div id="firezone" ref={zoneref}>
-              {/* <img src={im} width="100" alt="folder"/> */}
+        <div id="firezone" ref={zoneref} style={{
+          height:lgBomb+100,
+          width:lgBomb+100
+        }}>
 
             { 
-    //          const buttonStyle = {
-    //           width: '40px', // Buttons with background images usually need dimensions
-    //           height: '40px',
-    // backgroundImage: `url(${bebombImg})`,
-    // backgroundSize: 'cover',
-    // backgroundColor:"transparent",
-    // border: 'none',
-    // cursor: 'pointer',
-    // boxShadow: 'none',
-    // position: 'relative',
-    // top: x+'px',
-    // left: y+'px'
+            coords.map(({ xy, bomb, id}) => (
 
-    // };
-            coords.map(({ xy, bomb, id }) => (
-             
                     <button key = {id} style={{
                       position : 'relative' ,
                       top : xy[1] + 'px',
@@ -107,20 +95,30 @@ function Meme() {
                       backgroundImage: `url(${bebombImg})`,
                       backgroundSize: 'cover',
                       backgroundColor:"transparent",
-                      }} onClick={() => {
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: 'none',
+                      }} onClick={(event) => {
                       if(bomb){
-                        console.log("boom")
+                        console.log("boom");
+                        alert("Boom !!!!!"+String.fromCodePoint(0x1F621));
+                        window.location.reload(); 
                       }else{
-                        console.log("oof")
+                        console.log("oof");
+                        let parentStyle = event.target.style;
+                        parentStyle.backgroundImage=`url(${crossImg})`;
+                
+                        nbBombFound++;
+                        if (nbBombFound == nbBomb-1) {
+                          alert("Yeah !!!!");
+                          window.location.reload(); 
+                        }
                       }
                     }}  >
-                         {/* <img src="./assets/pngwing.com.png" width="100" alt="folder"/> */}
+                      
                     </button>
                 ))}
         </div>
-        
-      
-      
     </>
   )}
 

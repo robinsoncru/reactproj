@@ -1,12 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { useNavigate } from "react-router";
 
-import jumpSound from './assets/do-80236.mp3'; 
 import coin from './assets/coin.mp3'; 
-import death from './assets/death.mp3'; 
 import mamamia from './assets/mamamia.mp3'; 
 import music from './assets/music.mp3'; 
 
@@ -60,7 +57,6 @@ function App() {
   }
 
   
-  //  const [playSound] = useSound('./assets.mp3');
 
 
   async function increaseBright(bright ,bool,t){
