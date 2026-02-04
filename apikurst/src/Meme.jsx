@@ -8,7 +8,7 @@ import coin from './assets/coin.mp3';
 import death from './assets/death.mp3'; 
 import mamamia from './assets/mamamia.mp3'; 
 import music from './assets/music.mp3'; 
-import im from './assets/pngwing.com.png?raw'
+// import im from './assets/pngwing.com.png?raw'
 import list from './assets/characters.json'
 
 let nb_loads = 0 ;
@@ -79,7 +79,7 @@ function Meme() {
       
       
         <div id="firezone" ref={zoneref}>
-              <img src={im} width="100" alt="folder"/>
+              {/* <img src={im} width="100" alt="folder"/> */}
 
             { 
             coords.map(({ xy, bomb, id }) => (
@@ -90,7 +90,7 @@ function Meme() {
                         console.log("oof")
                       }
                     }}  >
-                         <img src="./assets/pngwing.com.png" width="100" alt="folder"/>
+                         {/* <img src="./assets/pngwing.com.png" width="100" alt="folder"/> */}
                     </button>
                 ))}
         </div>
