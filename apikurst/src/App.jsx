@@ -159,7 +159,7 @@ function App() {
       <h2>{result}</h2>
       
       <div>
-        <p>It is {name} and id {nb} </p>
+        {/* <p>It is {name} and id {nb} </p> */}
         <p> {comment}  </p>
 
         <button onClick={() => {
